@@ -1,0 +1,8 @@
+1.Extract circles
+2.Extract red and green pigment
+3.Color the shapes
+4.Stack the shapes
+5.Cut the shapes in half
+6.Rotate the shapes
+7.Cut in half again
+8.Deliver to hub
