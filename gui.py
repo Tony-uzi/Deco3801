@@ -1,16 +1,10 @@
 import wx
 import os
 
-###########################################################################
-## Class FrameMain
-###########################################################################
-
 class FrameMain(wx.Frame):
-
     def __init__(self, parent, file_path, conveyor_data):
         wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=("Shapez.AI"), pos=wx.DefaultPosition, size=wx.Size(600, 500),
                           style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
-
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
         self.SetForegroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNHIGHLIGHT))
         self.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_INFOBK))
@@ -27,7 +21,7 @@ class FrameMain(wx.Frame):
 
         # Image at the top (angry, ok, happy)
         self.image_ctrl = wx.StaticBitmap(self.page1, wx.ID_ANY)
-        sbSizer1.Add(self.image_ctrl, 0, wx.ALIGN_CENTER | wx.ALL, 10)  # Align center
+        sbSizer1.Add(self.image_ctrl, 0, wx.ALIGN_CENTER | wx.ALL, 10)
 
         # Text to display the average productivity
         self.avg_productivity_text = wx.StaticText(self.page1, wx.ID_ANY, "", wx.DefaultPosition, wx.DefaultSize, 0)
@@ -49,15 +43,15 @@ class FrameMain(wx.Frame):
 
         # Page 2 - Shapez.io Productivity with Scrolling
         self.page2 = wx.ScrolledWindow(self.notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.HSCROLL | wx.VSCROLL)
-        self.page2.SetScrollRate(5, 5)  # Set scrolling speed
+        self.page2.SetScrollRate(5, 5)
 
         sbSizer2 = wx.StaticBoxSizer(wx.StaticBox(self.page2, wx.ID_ANY, "Shapez.io Productivity"), wx.VERTICAL)
 
         # FlexGridSizer for Conveyor productivity with 3 columns
-        self.grid_sizer = wx.FlexGridSizer(0, 3, 10, 10)  # 3 columns: Conveyor ID, Items Transported, Efficiency Gauge
-        self.grid_sizer.AddGrowableCol(0, 1)  # Make first column (Conveyor ID) expand
-        self.grid_sizer.AddGrowableCol(1, 1)  # Make second column (Items Transported) expand
-        self.grid_sizer.AddGrowableCol(2, 1)  # Make third column (Efficiency) expand
+        self.grid_sizer = wx.FlexGridSizer(0, 3, 10, 10)
+        self.grid_sizer.AddGrowableCol(0, 1)
+        self.grid_sizer.AddGrowableCol(1, 1)
+        self.grid_sizer.AddGrowableCol(2, 1)
 
         # Add Headers for the columns
         self.grid_sizer.Add(wx.StaticText(self.page2, label="Conveyor ID"), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, proportion=1)
@@ -86,23 +80,27 @@ class FrameMain(wx.Frame):
         # Calculate the average productivity and display the image
         self.calculate_and_display_image(conveyor_data)
 
+        # Add the conveyor data to Page 2
+        self.add_conveyors_from_data(conveyor_data)
+
+    def get_scaling_factor(self):
+        ppi = wx.GetDisplayPPI()
+        return ppi[0] / 96  # 96 is default DPI
+
     def load_file(self, file_path):
-        """Automatically loads the .txt file and displays its content in the text box"""
         try:
             with open(file_path, 'r') as file:
                 content = file.read()
-                self.script_display.SetValue(content)  # Set the content in the text control
+                self.script_display.SetValue(content)
         except IOError:
             wx.LogError(f"Cannot open file '{file_path}'.")
 
     def calculate_and_display_image(self, conveyor_data):
-        """Calculates the average productivity and displays the appropriate image and text"""
         if not conveyor_data:
             return
 
         total_efficiency = 0
         working_conveyors = 0
-
         for _, _, efficiency in conveyor_data:
             total_efficiency += efficiency
             working_conveyors += 1
@@ -112,64 +110,59 @@ class FrameMain(wx.Frame):
         else:
             average_efficiency = 0
 
-        # Update the average productivity text below the icon
         self.avg_productivity_text.SetLabel(f"Average Productivity: {average_efficiency:.2f}%")
 
-        # Determine which image to display based on the average efficiency
         if average_efficiency < 40:
-            self.show_image("angry.png")  # Show angry image
+            self.show_image("angry.png")
         elif 40 <= average_efficiency <= 80:
-            self.show_image("ok.png")  # Show ok image
+            self.show_image("ok.png")
         else:
-            self.show_image("happy.png")  # Show happy image
+            self.show_image("happy.png")
 
     def show_image(self, image_filename):
-        """Loads and displays the specified image in the top of page 1"""
-        # Replace this with the actual path to the image files
-        image_folder = "image"  # Adjust this to your folder
+        image_folder = "image"
         image_path = os.path.join(image_folder, image_filename)
-
+        scaling_factor = self.get_scaling_factor()
         if os.path.exists(image_path):
-            image = wx.Image(image_path, wx.BITMAP_TYPE_ANY).Scale(100, 100).ConvertToBitmap()  # Adjust image size
-            self.image_ctrl.SetBitmap(image)
+            image = wx.Image(image_path, wx.BITMAP_TYPE_ANY).Scale(int(100 * scaling_factor), int(100 * scaling_factor))
+            self.image_ctrl.SetBitmap(wx.Bitmap(image))
             self.image_ctrl.Refresh()
         else:
             wx.LogError(f"Image file '{image_path}' not found.")
 
     def add_conveyor_row(self, conveyor_id, items, efficiency):
-        """Adds a conveyor row to the grid with a gauge for efficiency"""
-        # Add Conveyor ID, Items Transported, and Efficiency
+        # Add conveyor ID
         self.grid_sizer.Add(wx.StaticText(self.page2, label=conveyor_id), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, proportion=1)
+        
+        # Add items transported
         self.grid_sizer.Add(wx.StaticText(self.page2, label=items), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, proportion=1)
 
-        # Create a panel for the gauge with text label (Efficiency percentage)
-        efficiency_panel = wx.Panel(self.page2)
-        hbox = wx.BoxSizer(wx.HORIZONTAL)
+        # Create a wx.BoxSizer to hold the gauge and the percentage label
+        efficiency_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        # Efficiency Gauge (wx.Gauge)
-        efficiency_gauge = wx.Gauge(efficiency_panel, range=100, size=(150, 20))
-        efficiency_gauge.SetValue(efficiency)
-        hbox.Add(efficiency_gauge, flag=wx.EXPAND)
+        # Create a wx.Gauge for efficiency as a progress bar
+        gauge = wx.Gauge(self.page2, range=100, size=(100, 20))
+        gauge.SetValue(efficiency)
 
-        # Efficiency Label
-        efficiency_label = wx.StaticText(efficiency_panel, label=f"{efficiency}%")
-        hbox.Add(efficiency_label, flag=wx.LEFT, border=10)
+        # Add the gauge to the sizer
+        efficiency_sizer.Add(gauge, flag=wx.ALIGN_CENTER_VERTICAL)
 
-        # Set layout for the panel and add to the grid
-        efficiency_panel.SetSizer(hbox)
-        self.grid_sizer.Add(efficiency_panel, flag=wx.EXPAND, proportion=1)
+        # Add a StaticText next to the gauge to display the efficiency percentage
+        efficiency_label = wx.StaticText(self.page2, label=f"{efficiency}%")
+        efficiency_sizer.Add(efficiency_label, flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT, border=10)
 
-        # Add a separator line below each conveyor row
-        self.grid_sizer.Add(wx.StaticLine(self.page2), flag=wx.EXPAND | wx.ALL, border=5)
-        self.grid_sizer.Add(wx.StaticLine(self.page2), flag=wx.EXPAND | wx.ALL, border=5)
-        self.grid_sizer.Add(wx.StaticLine(self.page2), flag=wx.EXPAND | wx.ALL, border=5)
+        # Add the sizer (with the gauge and percentage) to the grid
+        self.grid_sizer.Add(efficiency_sizer, flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, proportion=1)
 
+        # Add a separator line after each row
+        self.grid_sizer.Add(wx.StaticLine(self.page2), flag=wx.EXPAND, proportion=3)
+        self.grid_sizer.Add(wx.StaticLine(self.page2), flag=wx.EXPAND, proportion=3)
+        self.grid_sizer.Add(wx.StaticLine(self.page2), flag=wx.EXPAND, proportion=3)
 
-# Outside the class: Function to insert conveyor data from external input
-def add_conveyors_from_data(frame, conveyor_data):
-    """Takes a list of conveyor data and adds rows to the frame"""
-    for conveyor_id, items, efficiency in conveyor_data:
-        frame.add_conveyor_row(conveyor_id, items, efficiency)
+    # This method should be inside the FrameMain class
+    def add_conveyors_from_data(self, conveyor_data):
+        for conveyor_id, items, efficiency in conveyor_data:
+            self.add_conveyor_row(conveyor_id, items, efficiency)
 
 
 # Main application logic
@@ -185,24 +178,18 @@ if __name__ == "__main__":
         ("Conveyor 2", "1200", 85),
         ("Conveyor 3", "500", 75),
         ("Conveyor 4", "700", 65),
-        ("Conveyor 5", "900", 50),  # Test data
-        ("Conveyor 4", "700", 65),
-        ("Conveyor 4", "700", 65),
-        ("Conveyor 4", "700", 65),
-        ("Conveyor 4", "700", 65),
-        ("Conveyor 4", "700", 65),
-        ("Conveyor 4", "700", 65),
-        ("Conveyor 4", "700", 65),
-        ("Conveyor 4", "700", 65),
-        ("Conveyor 4", "700", 65)
-
+        ("Conveyor 5", "900", 50),
+        ("Conveyor 5", "900", 50),
+        ("Conveyor 5", "900", 50),
+        ("Conveyor 5", "900", 50),
+        ("Conveyor 5", "900", 50),
+        ("Conveyor 5", "900", 50),
+        ("Conveyor 5", "900", 50),
+        ("Conveyor 5", "900", 50)
     ]
     
     # Create the main frame, pass the file path and conveyor data
     frame = FrameMain(None, file_path, conveyor_data)
-    
-    # Add the conveyor data to Page 2
-    add_conveyors_from_data(frame, conveyor_data)
     
     frame.Show(True)
     app.MainLoop()
