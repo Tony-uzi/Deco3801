@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shapez.AI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Shapez.AI Dashboard</h1>
+        <div class="tabs">
+            <button class="tab-button" data-tab="ai-script-viewer">AI Script Viewer</button>
+            <button class="tab-button" data-tab="shapez-productivity">Shapez.io Productivity</button>
+        </div>
+        <div class="tab-content">
+            <!-- AI Script Viewer Tab -->
+            <div id="ai-script-viewer" class="tab-pane active">
+                <div class="ai-script-viewer">
+                    <img id="productivity-image" src="image/ok.png" alt="Productivity Image">
+                    <p id="average-productivity">Average Productivity: 0%</p>
+                    <textarea id="script-display" readonly></textarea>
+                </div>
+            </div>
+            <!-- Shapez.io Productivity Tab -->
+            <div id="shapez-productivity" class="tab-pane">
+                <div class="shapez-productivity">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Conveyor ID</th>
+                                <th>Items Transported</th>
+                                <th>Efficiency</th>
+                            </tr>
+                        </thead>
+                        <tbody id="conveyor-table-body">
+                            <!-- Rows will be dynamically added by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="style.js"></script>
+</body>
+</html>
