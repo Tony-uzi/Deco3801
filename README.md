@@ -27,7 +27,7 @@ Usage Instructions
 
 1.Run the Preprocessing Script
 
-Use the following command to process the original images and generate the template library:
+Use the following command to run the code:
 
 python imgpreprocessing.py
 
