@@ -150,7 +150,7 @@ async function main() {
     console.log(`- External: ${(usedMemory.external / 1024 / 1024).toFixed(2)} MB`);
 
     // 调用 Python 脚本, 使用子进程打开GUI，确保本地terminal的默认python有pyqt5库
-    exec('python pyqt.py', (error, stdout, stderr) => {
+    /*exec('python pyqt.py', (error, stdout, stderr) => {
         if (error) {
             console.error(`Error: ${error.message}`);
             return;
@@ -163,7 +163,7 @@ async function main() {
 
         // 输出 Python 脚本的标准输出
         console.log(`Python Output: ${stdout}`);
-});
+});*/
 
 }
 
