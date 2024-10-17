@@ -1,5 +1,5 @@
 # Deco3801
-This is the translator part with all versions while the progress is keeping updating, please run the V6 version(V7 is modified to set down into final whole system which cannot be run singlely)
+This is the translator part with all versions while the progress is keeping updating, please directly run the V6 version with 'twst.txt' in the same directory(V7 is modified to set down into final whole system which cannot be run singlely)
 line 152-168. This is no longer used as the team changed the method to open GUI
 The translator is going to decode the machine code which is provided by the previous problem-solver and show the human readable instructions
 The 'test.txt' file is used as a sample of problem-solver's output. In translator.JS, just run it(the default name of the test file has already been set as 'test.txt').
