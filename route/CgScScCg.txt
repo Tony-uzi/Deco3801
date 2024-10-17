@@ -1,7 +1,0 @@
-Steps:
-1.Extract green and blue, then mix it to make cyan
-2.Extract more green (for top half)
-3.Cut circles and stars in half, then rotate them appropriately
-4.Paint the circles and stars
-5.Stack them using the stacker
-6.Deliver to hub

@@ -1,5 +1,0 @@
-1.Find and extract the base shape (3/4 circle, 1/4 rectangle), or create it by cutting and layering other shapes
-2.Extract blue and white pigment
-3.Color the shapes respectively
-4.Stack the shapes
-5.Deliver to hub
