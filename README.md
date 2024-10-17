@@ -11,24 +11,18 @@ Make sure the following dependencies are installed before running the scripts:
 
 Python 3.x
 OpenCV (Install via pip):
-bash
-Copy code
 pip install opencv-python
+
 Usage Instructions
-Run the Preprocessing Script
+1.Run the Preprocessing Script
 Use the following command to process the original images and generate the template library:
-
-bash
-Copy code
 python imgpreprocessing.py
-Extract the Template Library
-Extract the contents of template.zip:
 
-bash
-Copy code
-unzip template.zip -d ./templates
+2.Unzip the zip file.
+
 Notes
 Template Library Updates: If the images from Shapez are updated, rerun imgpreprocessing.py to regenerate the template library.
 Testing Environment: Ensure all required dependencies, such as Python and OpenCV, are installed before running the scripts.
+
 License
 This project uses images and code derived from the open-source Shapez project. All materials must adhere to the corresponding open-source license.
