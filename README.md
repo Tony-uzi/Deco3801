@@ -10,16 +10,14 @@ Stage-Killer is a mod for shapez.io that offers an automated gameplay experience
 - **Performance Evaluation**: Evaluates and improves factory performance to help achieve the best outcomes.
 
 ## Installation
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/yourusername/stage-killer.git
-    ```
+1. Download "Stage Killer.js"
+  
 2. Navigate to the mods folder for shapez.io:
     Place the cloned mod folder in:
     ```
     C:\Users\[username]\AppData\Roaming\shapez.io\mods
     ```
-
+Or open shapez.io (recommand to use steam version), and open mod folder, put Stage Killer.js inside.
 ## Usage
 - Press `V` to activate the mod, generate buildings automatically to solve the stage.
 - Press 'U' to open and close the Guide GUI
